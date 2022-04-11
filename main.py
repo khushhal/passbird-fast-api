@@ -3,6 +3,7 @@ import string
 from typing import List
 
 from fastapi import FastAPI, Depends, Request, HTTPException
+from mangum import Mangum
 from pydantic.tools import lru_cache
 from sqlalchemy.orm import Session
 from starlette.middleware.cors import CORSMiddleware
@@ -86,3 +87,6 @@ async def create_application(rq: Request, application_item: ApplicationPostSchem
         db.add(new_application)
         db.commit()
         return new_application
+
+
+handler = Mangum(app=app)
