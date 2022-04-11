@@ -61,6 +61,12 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       # Step 1
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+          architecture: x64
+      # Step 2
       - name: Install AWS CLI
         uses: unfor19/install-aws-cli-action@v1
         with:
@@ -69,19 +75,19 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-      # Step 2
+      # Step 3
       - name: Download Lambda api.zip
         uses: actions/download-artifact@v2
         with:
           name: api
-      # Step 3
+      # Step 4
       - name: Upload to S3
         run: aws s3 cp api.zip s3://passbird-fast-api/api.zip
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-      # Step 4
+      # Step 5
       - name: Deploy new Lambda
         run: aws lambda update-function-code --function-name passbird-api --s3-bucket passbird-fast-api --s3-key api.zip
         env:
