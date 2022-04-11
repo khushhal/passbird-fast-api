@@ -23,3 +23,7 @@ archive.zip
 # vim temporary files
 *~
 .*.sw?
+
+.env
+pvenv
+actions-runner
